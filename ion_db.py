@@ -10,13 +10,13 @@ class Schema_Field:
     def __init__ (self, data):
         self.name = data[0]
         self.type = data[1]
-        self.value_fn = data[2]
 
     def get_value(self, obj):
-        if type(self.value_fn) in [type(0), type(''), type (0.5)]:
-            return self.value_fn
-        else:
-            return self.value_fn(obj)
+        # if type(self.value_fn) in [type(0), type(''), type (0.5)]:
+        #     return self.value_fn
+        # else:
+        #     return self.value_fn(obj)
+        return obj[self.name]
 
 class Schema (UserDict):
 
@@ -41,7 +41,7 @@ class Schema (UserDict):
         row_value_list = []
         for field in self.fields:
             val = field.get_value(obj)
-            if type(val) == type(''):
+            if type(val) == type('') or type(val) == type(u''):
                 row_value_list.append("'{}'".format(val.replace ("'", "%27")))
             if type(val) == type(1) or type(val) == type(1.5):
                 row_value_list.append(str(val))
@@ -60,14 +60,14 @@ def get_checksum(path):
 
 class DBTable:
 
-    # sqlite_file = '/Users/ostwald/tmp/comms_db.sqlite'
-    sqlite_file = ''
-    table_name = ''
-    schema_spec = []
 
-    def __init__(self):
+    def __init__(self, sqlite_file, table_name, schema_spec=None):
+        self.sqlite_file = sqlite_file
+        self.table_name = table_name
+        self.schema_spec = schema_spec
         self.schema = self.make_schema()
-        self.setup()
+        if not self.table_exists():
+            self.setup()
 
     def table_exists (self):
         conn = sqlite3.connect(self.sqlite_file)
@@ -104,11 +104,11 @@ class DBTable:
 
         # quoted_schema = ','.join(map (lambda x:"'%s'" % x, HOSTS_SCHEMA_SPEC))
         quoted_schema = self.schema.quoted_schema
-        print 'quoted_schema: %s' % quoted_schema
+        # print 'quoted_schema: %s' % quoted_schema
 
         # put data list together to match with schema fields
         quoted_values = self.schema.obj_to_data_values(row)
-        print 'quoted_values: %s' % quoted_values
+        # print 'quoted_values: %s' % quoted_values
 
         try:
             c.execute("INSERT INTO {tn} ({fn}) VALUES ({fv})" \
