@@ -42,10 +42,17 @@ class Schema (UserDict):
         for field in self.fields:
             val = field.get_value(obj)
             if type(val) == type('') or type(val) == type(u''):
-                row_value_list.append("'{}'".format(val.replace ("'", "%27")))
+                try:
+                    row_value_list.append(u"'{}'".format(val.replace ("'", "%27")))
+                except UnicodeEncodeError, msg:
+                    print msg
+                    print "val: %s" % val
+                    # row_value_list.append (u"")
+                    sys.exit(1)
+
             if type(val) == type(1) or type(val) == type(1.5):
-                row_value_list.append(str(val))
-        quoted_values = ','.join(row_value_list)
+                row_value_list.append(unicode(str(val)))
+        quoted_values = u','.join(row_value_list)
 
         return quoted_values
 
@@ -104,17 +111,18 @@ class DBTable:
 
         # quoted_schema = ','.join(map (lambda x:"'%s'" % x, HOSTS_SCHEMA_SPEC))
         quoted_schema = self.schema.quoted_schema
-        # print 'quoted_schema: %s' % quoted_schema
 
         # put data list together to match with schema fields
         quoted_values = self.schema.obj_to_data_values(row)
-        # print 'quoted_values: %s' % quoted_values
 
         try:
-            c.execute("INSERT INTO {tn} ({fn}) VALUES ({fv})" \
+            c.execute(u"INSERT INTO {tn} ({fn}) VALUES ({fv})" \
                       .format(tn=self.table_name, fn=quoted_schema, fv=quoted_values))
         except:
             print('ERROR: {}'.format(sys.exc_info()))
+            print 'quoted_schema: %s' % quoted_schema
+            print 'quoted_values: %s' % type(quoted_values)
+            sys.exit(1)
 
         conn.commit()
         conn.close()

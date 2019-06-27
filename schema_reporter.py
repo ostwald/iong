@@ -1,8 +1,7 @@
 __author__ = 'ostwald'
 
 import sys, os
-
-sys.path.append ('/Users/ostwald/devel/python/python-lib')
+sys.path.append ('/Users/ostwald/devel/python-lib')
 
 from tabdelimited import CsvFile, FieldList, CsvRecord
 
@@ -30,5 +29,5 @@ class SchemaReporter (CsvFile):
 			print '-', field
 
 if __name__ == '__main__':
-	path = '/Users/ostwald/Documents/people/Karen/IONG_Orders/select_fields/Orders_selected_fields.csv'
+	path = '/Users/ostwald/Documents/ION_DB/data/IONG_Orders/select_fields/Customers_selected_fields.csv'
 	SchemaReporter (path)
