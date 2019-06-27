@@ -2,12 +2,9 @@ import sys, os, re, time, json
 
 sys.path.append ('/Users/ostwald/devel/python-lib/')
 
-from UserDict import UserDict
-from UserList import UserList
 
-
-import sqlite3
 from ion_table import DBTable, DBRecord
+from order_details_table import OrderDetailsTable
 import schemas
 
 class OrderRecord(DBRecord):
@@ -16,14 +13,13 @@ class OrderRecord(DBRecord):
 class OrdersTable (DBTable):
 
     schema_fields = schemas.order
-    sqlite_file = '/Users/ostwald/Documents/ION_DB/ion_db.sqlite'
+    # sqlite_file = '/Users/ostwald/Documents/ION_DB/ion_db.sqlite'
+    sqlite_file = 'ion_db.sqlite'
     table_name = 'orders'
 
     def get_order (self, orderid):
         query = "SELECT *  FROM `{tn}` WHERE orderid = '{id}'"\
                 .format(tn=self.table_name, id=orderid)
-
-        # print total_query
 
         self.cursor.execute(query)
         row = self.cursor.fetchone()
@@ -48,16 +44,26 @@ def get_order_tester():
 
     print json.dumps(order.asDict())
 
-if __name__ == '__main__':
-    table = OrdersTable()
 
-    orders = table.get_order_ids()
+def get_orders_asJson():
+    orders_table = OrdersTable()
+    orders = orders_table.get_order_ids()
+
+    order_details_table = OrderDetailsTable()
 
     j = {}
-    for orderid in orders:
-        j[orderid] = table.get_order(orderid).asDict()
+    for orderid in orders[:100]:
+        j[orderid] = orders_table.get_order(orderid).asDict()
+        details = order_details_table.get_order_details(orderid)
+        j[orderid]['order_details'] = []
+        for obj in details:
+            j[orderid]['order_details'].append(obj.asDict())
+
 
     fp = open ("JSON_TESTER.json", 'w')
-    fp.write (json.dumps(j))
+    fp.write (json.dumps(j, sort_keys=False, indent=4, separators=(',', ': ')))
     fp.close()
     print 'json written'
+
+if __name__ == '__main__':
+    get_orders_asJson()
