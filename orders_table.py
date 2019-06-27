@@ -10,6 +10,9 @@ import sqlite3
 from ion_table import DBTable, DBRecord
 import schemas
 
+class OrderRecord(DBRecord):
+    schema_fields = schemas.order
+
 class OrdersTable (DBTable):
 
     schema_fields = schemas.order
@@ -25,7 +28,7 @@ class OrdersTable (DBTable):
         self.cursor.execute(query)
         row = self.cursor.fetchone()
 
-        return DBRecord(row, self.schema)
+        return OrderRecord(row)
 
     def get_order_ids(self, sort_by='orderdate', order='ASC'):
         query = "SELECT orderid FROM {} ORDER BY '{}' {}"\

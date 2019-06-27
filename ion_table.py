@@ -20,18 +20,21 @@ def get_checksum(path):
     return m.hexdigest()
 
 class DBRecord:
+
     """
     A record consisting of a list of data values, and a schema that provides
     field names and accessors to the data
     """
 
-    def __init__(self, data, schema):
+    schema_fields = None
+
+    def __init__(self, data):
         """
         data - a list of values
         parent - an object that has a 'schema' attribute
         """
         self.data = data
-        self.schema = schema
+        self.schema = FieldList(self.schema_fields)
 
     def __getitem__(self, field):
         """
