@@ -58,6 +58,12 @@ class DBRecord:
             add (self[field])
         return string.join (fields, '\t')
 
+    def asDict(self):
+        d = {}
+        for field in self.schema:
+            d[field] = self[field]
+        return d
+
 class DBTable:
 
     schema_fields = []
