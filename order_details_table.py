@@ -17,7 +17,7 @@ class OrderDetailsTable (DBTable):
 
     schema_fields = schemas.order_details
     # sqlite_file = '/Users/ostwald/Documents/ION_DB/ion_db.sqlite'
-    sqlite_file = 'ion_db.sqlite'
+    sqlite_file = '/Users/ostwald/devel/projects/iong/ion_db.sqlite'
     table_name = 'order_details'
 
     def get_order_details (self, orderid):

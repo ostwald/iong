@@ -14,7 +14,7 @@ class OrdersTable (DBTable):
 
     schema_fields = schemas.order
     # sqlite_file = '/Users/ostwald/Documents/ION_DB/ion_db.sqlite'
-    sqlite_file = 'ion_db.sqlite'
+    sqlite_file = '/Users/ostwald/devel/projects/iong/ion_db.sqlite'
     table_name = 'orders'
 
     def get_order (self, orderid):
@@ -45,25 +45,29 @@ def get_order_tester():
     print json.dumps(order.asDict())
 
 
-def get_orders_asJson():
+def get_orders_by_date():
     orders_table = OrdersTable()
-    orders = orders_table.get_order_ids()
+    orders = orders_table.get_order_ids(sort_by='orderdate')
 
     order_details_table = OrderDetailsTable()
 
-    j = {}
+    j = []
     for orderid in orders[:100]:
-        j[orderid] = orders_table.get_order(orderid).asDict()
+        order = orders_table.get_order(orderid).asDict()
         details = order_details_table.get_order_details(orderid)
-        j[orderid]['order_details'] = []
-        for obj in details:
-            j[orderid]['order_details'].append(obj.asDict())
+        obj_json = {
+            'orderdate':order['orderdate'],
+            'order' : order,
+            'details' : [],
+        }
+        for d in details:
+            obj_json['details'].append (d.asDict())
+        j.append(obj_json)
 
-
-    fp = open ("JSON_TESTER.json", 'w')
+    fp = open ("ORDERS_BY_DATE.json", 'w')
     fp.write (json.dumps(j, sort_keys=False, indent=4, separators=(',', ': ')))
     fp.close()
     print 'json written'
 
 if __name__ == '__main__':
-    get_orders_asJson()
+    get_orders_by_date()

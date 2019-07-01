@@ -1,6 +1,12 @@
 __author__ = 'ostwald'
 
 from UserDict import UserDict
+from orders_table import OrdersTable
+from order_details_table import OrderDetailsTable
+from customers_table import CustomersTable
+
+
+
 
 class WarningUserDict (UserDict):
 

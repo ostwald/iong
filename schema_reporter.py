@@ -1,12 +1,12 @@
 __author__ = 'ostwald'
 
-import sys, os
+import os
+import sys
+
 sys.path.append ('/Users/ostwald/devel/python-lib')
 
-from tabdelimited import CsvFile, FieldList, CsvRecord
+from tabdelimited import CsvFile
 
-from order_detail_reader import OrderDetailReader
-from customer_reader import CustomerReader
 
 class SchemaReporter (CsvFile):
 
