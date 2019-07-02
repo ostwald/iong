@@ -7,6 +7,9 @@ sys.path.append ('/Users/ostwald/devel/projects/')
 from iong import OrdersTable, OrderDetailsTable, CustomersTable
 import schemas
 
+"""
+SELECT orderid, customerid, orderdate FROM orders where orderdate > '2/2/16' AND orderdate < '4/1/16';
+"""
 
 def get_orders_by_date():
     orders_table = OrdersTable()
