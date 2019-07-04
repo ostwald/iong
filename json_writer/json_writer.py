@@ -1,4 +1,5 @@
-import sys, os, re, time, json
+import sys, os, re, time, json, datetime
+from dateutil.relativedelta import *
 
 sys.path.append ('/Users/ostwald/devel/python-lib/')
 sys.path.append ('/Users/ostwald/devel/projects/')
@@ -43,5 +44,24 @@ def write_orders_by_date():
     fp.close()
     print 'json written'
 
+def get_first_of_next_month (date_str):
+    fmt = '%m/%d/%y'
+
+    n = datetime.datetime.strptime(date_str,fmt)
+    n = n + relativedelta(months=+1)
+
+    return n.strftime (fmt)
+
+def write_batched_orders_by_date():
+    import datetime
+    start_day = '1/1/16'
+    end_day = '6/30/19'
+
+    for i in range (1,14):
+        print start_day
+        start_day = get_first_of_next_month(start_day)
+
+
 if __name__ == '__main__':
-    write_orders_by_date()
+    write_batched_orders_by_date()
+    # write_orders_by_date()
