@@ -1,0 +1,28 @@
+.order_entry {
+    width:80%;
+    border:thin black solid;
+    margin:5px;
+    padding:5px;
+}
+
+.billing_address, .ship_address {
+    display:inline-block;
+}
+
+.billing_address {
+    width:50%;
+}
+
+.ship_address {
+
+}
+
+.order_details {
+    background:lightcyan;
+}
+
+.order-date-header {
+    display:inline;
+    font-size:18pt;
+    font-weight:bold;
+}

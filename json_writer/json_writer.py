@@ -5,13 +5,13 @@ sys.path.append ('/Users/ostwald/devel/projects/')
 
 
 from iong import OrdersTable, OrderDetailsTable, CustomersTable
-import schemas
+import iong.schemas
 
 """
 SELECT orderid, customerid, orderdate FROM orders where orderdate > '2/2/16' AND orderdate < '4/1/16';
 """
 
-def get_orders_by_date():
+def write_orders_by_date():
     orders_table = OrdersTable()
     customers_table = CustomersTable()
     orders = orders_table.get_order_ids(sort_by='orderdate')
@@ -19,7 +19,7 @@ def get_orders_by_date():
     order_details_table = OrderDetailsTable()
 
     j = []
-    for orderid in orders[:100]:
+    for orderid in orders[:1000]:
         order = orders_table.get_order(orderid).asDict()
         details = order_details_table.get_order_details(orderid)
         try:
@@ -44,4 +44,4 @@ def get_orders_by_date():
     print 'json written'
 
 if __name__ == '__main__':
-    get_orders_by_date()
+    write_orders_by_date()
