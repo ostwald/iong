@@ -1,0 +1,51 @@
+<!doctype html>
+
+<HTML>
+<HEAD>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        table {
+            font-size: 1em;
+        }
+
+        .ui-draggable, .ui-droppable {
+            background-position: top;
+        }
+    </style>
+    <META content="HyperText package (Python)" name="generator">
+    <title>jQuery UI Datepicker - Display month &amp; year menus</title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+    <LINK href="styles.css" type="text/css" rel="stylesheet">
+    <SCRIPT src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.1/jquery.min.js" type="text/javascript"></SCRIPT>
+    <SCRIPT src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"
+            type="text/javascript"></SCRIPT>
+    <SCRIPT src="moment.min.js" type="text/javascript"></SCRIPT>
+    <SCRIPT src="base-script.js" type="text/javascript"></SCRIPT>
+    <SCRIPT src="javascript.js" type="text/javascript"></SCRIPT>
+    <script>
+        $( function() {
+            $( "#datepicker" ).datepicker({
+                changeMonth: true,
+                changeYear: true,
+                onClose: function (dateText, inst) {
+                    log ("Date picker got " + dateText);
+                    var mdate = moment(dateText, "MM/DD/YYY")
+                    log (" that would be " + (mdate.format('YYYY-MM-DD')));
+                }
+
+            });
+        } );
+    </script>
+</HEAD>
+<BODY>
+
+<p>Date: <input type="text" id="datepicker"></p>
+
+
+</body>
+</html>
+

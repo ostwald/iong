@@ -51,7 +51,7 @@ class Schema (UserDict):
                     sys.exit(1)
 
             if type(val) == type(1) or type(val) == type(1.5):
-                row_value_list.append(unicode(str(val)))
+                row_value_list.append(unicode(val))
         quoted_values = u','.join(row_value_list)
 
         return quoted_values
