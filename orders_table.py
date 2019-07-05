@@ -26,9 +26,17 @@ class OrdersTable (DBTable):
 
         return OrderRecord(row)
 
-    def get_order_ids(self, sort_by='orderdate', order='ASC'):
-        query = "SELECT orderid FROM {} ORDER BY '{}' {}"\
-            .format(self.table_name, sort_by, order)
+    def get_order_ids(self, sort_by='orderdate', order='ASC', date_range=None):
+        query = "SELECT orderid FROM {}".format(self.table_name)
+
+        if date_range:
+            query += " WHERE orderdate > '{}' AND orderdate < '{}'" \
+                .format (date_range['start'], date_range['end'])
+
+        query += " ORDER BY '{}' {}".format(sort_by, order)
+
+
+        print "QUERY", query
 
         self.cursor.execute(query)
         rows = self.cursor.fetchall()
