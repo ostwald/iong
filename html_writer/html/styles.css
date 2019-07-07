@@ -1,24 +1,65 @@
-.order_entry {
-    width:80%;
+body {
+    font-family:arial;
+    font-size:.85em;
+}
+
+.customer {
+    font-size:1.2em;
+    /*margin:3px 0 3px;*/
+    display:inline-block;
+    padding-left:15px;
+}
+
+.order h3 {
+    margin:0px 5px;
+    padding:0;
+}
+
+.order {
+    /*width:80%;*/
     border:thin black solid;
-    margin:5px;
+    margin-left:15px;
     padding:5px;
 }
 
+.adresses-table {
+    border-collapse:collapse;
+    border: thin solid black;
+}
+
+.adresses-table td, th {
+    vertical-align: top;
+    font-size:.85em;
+    border:thin #ccc solid;
+    padding:3px;
+}
+
+.adresses-table th {
+    background:#ccc;
+    font-size:.7em;
+}
+
+
 .billing_address, .ship_address {
+    width:350px;
     display:inline-block;
+    /*border:orange thin solid;*/
 }
 
 .billing_address {
-    width:50%;
 }
 
 .ship_address {
 
 }
 
+.address_label {
+    text-align:center;
+    font-weight:bold;
+}
+
 .order_details {
-    background:lightcyan;
+    margin-top:8px;
 }
 
 .order-date-header {

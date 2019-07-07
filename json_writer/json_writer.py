@@ -21,7 +21,7 @@ def write_orders_by_date():
     orders = orders_table.get_order_ids(sort_by='orderdate')
 
     j = []
-    for orderid in orders[:1000]:
+    for orderid in orders:
         order = orders_table.get_order(orderid).asDict()
         details = order_details_table.get_order_details(orderid)
         try:
@@ -53,13 +53,6 @@ class OrderByDateWriter:
         self.order_details_table = OrderDetailsTable()
         self.orders_json = None
 
-    def write_month_orders_json (self, start):
-        """
-        start is of form YYYY-MM-DD
-        """
-        end = utils.get_first_of_next_month(start)
-        return self.get_orders_json (start, end)
-
     def get_orders_json (self, start, end):
         date_range = {'start':start, 'end':end}
         orders = self.orders_table.get_order_ids(sort_by='orderdate', date_range=date_range)
@@ -84,17 +77,22 @@ class OrderByDateWriter:
                 obj_json['details'].append (d.asDict())
             orders_json.append(obj_json)
 
-        outpath = os.path.join ('orders_by_date', start + '.json')
-        self.write_orders_json(orders_json, outpath)
-
         return orders_json
 
+    def write_month_orders_json (self, start):
+        """
+        start is of form YYYY-MM-DD
+        """
+        end = utils.get_first_of_next_month(start)
+        orders_json = self.get_orders_json (start, end)
+        outpath = os.path.join ('orders_by_date', start + '.json')
+        self.write_orders_json(orders_json, outpath)
 
     def write_orders_json (self, data_json, path):
         fp = open (path, 'w')
         fp.write (json.dumps(data_json, sort_keys=False, indent=4, separators=(',', ': ')))
         fp.close()
-        print 'json written'
+        print 'json written to {}'.format(path)
 
 def write_batched_orders_by_date():
     start_day = '2016-01-01'
@@ -107,8 +105,18 @@ def write_batched_orders_by_date():
         writer.write_month_orders_json(start_day)
         start_day = utils.get_first_of_next_month(start_day)
 
+def write_tester():
+    start = '2017-12-01'
+    end = '2017-12-31'
+
+    writer = OrderByDateWriter()
+    orders_json = writer.get_orders_json (start, end)
+    outpath = 'ORDERS_BY_DATE.json'
+    writer.write_orders_json(orders_json, outpath)
+
 if __name__ == '__main__':
-    write_batched_orders_by_date()
+    # write_batched_orders_by_date()
+    write_tester()
     # write_orders_by_date()
 
     # writer = OrderByDateWriter()

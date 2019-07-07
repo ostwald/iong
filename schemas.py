@@ -1,4 +1,5 @@
-sqlite_file = '/Users/ostwald/Documents/ION_DB/ion_db.sqlite'
+# sqlite_file = '/Users/ostwald/Documents/ION_DB/ion_db.sqlite'
+sqlite_file = '/Users/ostwald/devel/projects/iong/ion_db.sqlite'
 
 
 order_details = [

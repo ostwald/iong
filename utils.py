@@ -1,4 +1,4 @@
-import datetime
+import datetime, sys
 from dateutil.relativedelta import *
 
 def get_iso_date (date_str):
@@ -32,3 +32,25 @@ def get_first_of_next_month (date_str):
     n = n + relativedelta(months=+1)
 
     return n.strftime (fmt_out)
+
+def get_human_date (date_str):
+    day_fmt_in = '%Y-%m-%d'
+    day_fmt_out = '%-m/%-d/%y'
+    try:
+        n = datetime.datetime.strptime(date_str,day_fmt_in)
+        return n.strftime(day_fmt_out)
+    except ValueError:
+        try:
+            date_fmt_in = '%Y-%m-%d %H:%M'
+            date_fmt_out = '%-I:%M %p %-m/%-d/%y '
+            n = datetime.datetime.strptime(date_str,date_fmt_in)
+            return n.strftime(date_fmt_out)
+        except:
+            print sys.exc_info()
+            print "WARN: could not parse date: {}".format(date_str)
+            return date_str
+
+
+if __name__ == '__main__':
+    date_str = '2017-03-05 09:50'
+    print get_human_date(date_str)
