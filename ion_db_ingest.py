@@ -2,6 +2,7 @@ import sys, os, re, time
 from jloFS import JloFile
 from UserDict import UserDict
 from UserList import UserList
+import utils
 
 import sqlite3
 
@@ -16,7 +17,12 @@ class Schema_Field:
         #     return self.value_fn
         # else:
         #     return self.value_fn(obj)
-        return obj[self.name]
+        val = obj[self.name].strip()
+        if 'orderdate' == self.name:
+            # convert to long ISO
+            return utils.get_iso_date(val)
+
+        return val
 
 class Schema (UserDict):
 

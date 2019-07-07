@@ -49,11 +49,11 @@ if __name__ == '__main__':
         # path = '/Users/ostwald/Documents/ION_DB/data/IONG_Orders/select_fields/test/Orders.csv'
         # path = '/Users/ostwald/Documents/ION_DB/data/IONG_Orders/select_fields/test/Orders-tiny.csv'
 
-    if 0:
+    if 1:
         table_name = 'order_details'
         path = '/Users/ostwald/Documents/ION_DB/data/IONG_Orders/select_fields/since_2016/OrderDetails.csv'
 
-    if 1:
+    if 0:
         table_name = 'customers'
         path = '/Users/ostwald/Documents/ION_DB/data/IONG_Orders/select_fields/Customers_selected_fields.csv'
 

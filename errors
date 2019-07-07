@@ -1,0 +1,18 @@
+18509 records read
+Traceback (most recent call last):
+  File "csv_db_loader.py", line 61, in <module>
+    loader.load_table()
+  File "csv_db_loader.py", line 30, in load_table
+    self.db_table.add_record (row)
+  File "/Users/ostwald/devel/iong/ion_db_ingest.py", line 121, in add_record
+    quoted_values = self.schema.obj_to_data_values(row)
+  File "/Users/ostwald/devel/iong/ion_db_ingest.py", line 48, in obj_to_data_values
+    val = field.get_value(obj)
+  File "/Users/ostwald/devel/iong/ion_db_ingest.py", line 22, in get_value
+    return utils.get_iso_date(obj[self.name])
+  File "/Users/ostwald/devel/iong/utils.py", line 6, in get_iso_date
+    dt = datetime.datetime.strptime(date_str, in_time_fmt)
+  File "/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/_strptime.py", line 328, in _strptime
+    data_string[found.end():])
+ValueError: unconverted data remains:  39920
+

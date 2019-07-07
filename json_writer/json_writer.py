@@ -2,6 +2,7 @@ import sys, os, re, time, json, datetime
 
 sys.path.append ('/Users/ostwald/devel/python-lib/')
 sys.path.append ('/Users/ostwald/devel/projects/')
+sys.path.append ('/Users/ostwald/devel/')
 
 
 from iong import OrdersTable, OrderDetailsTable, CustomersTable
@@ -18,7 +19,6 @@ def write_orders_by_date():
     order_details_table = OrderDetailsTable()
 
     orders = orders_table.get_order_ids(sort_by='orderdate')
-
 
     j = []
     for orderid in orders[:1000]:
@@ -53,16 +53,16 @@ class OrderByDateWriter:
         self.order_details_table = OrderDetailsTable()
         self.orders_json = None
 
-    def write_month_orders_json (self, month, year):
-        start = "1/{}/{}".format(month, year)
+    def write_month_orders_json (self, start):
+        """
+        start is of form YYYY-MM-DD
+        """
         end = utils.get_first_of_next_month(start)
         return self.get_orders_json (start, end)
 
     def get_orders_json (self, start, end):
         date_range = {'start':start, 'end':end}
         orders = self.orders_table.get_order_ids(sort_by='orderdate', date_range=date_range)
-
-        sys.exit()
 
         orders_json = []
         for orderid in orders[:1000]:
@@ -84,7 +84,7 @@ class OrderByDateWriter:
                 obj_json['details'].append (d.asDict())
             orders_json.append(obj_json)
 
-        outpath = os.path.join ('orders_per_month', utils.get_iso_day(start) + '.json')
+        outpath = os.path.join ('orders_by_date', start + '.json')
         self.write_orders_json(orders_json, outpath)
 
         return orders_json
@@ -97,18 +97,19 @@ class OrderByDateWriter:
         print 'json written'
 
 def write_batched_orders_by_date():
-    import datetime
-    start_day = '1/1/16'
-    end_day = '6/30/19'
-
-    for i in range (1,14):
-        print start_day
-        start_day = utils.get_first_of_next_month(start_day)
-
-
-if __name__ == '__main__':
-    #write_batched_orders_by_date()
-    # write_orders_by_date()
+    start_day = '2016-01-01'
+    end_day = '2017-01-01'
 
     writer = OrderByDateWriter()
-    orders_json = writer.write_month_orders_json('3','16')
+
+    while start_day < end_day:
+        print start_day
+        writer.write_month_orders_json(start_day)
+        start_day = utils.get_first_of_next_month(start_day)
+
+if __name__ == '__main__':
+    write_batched_orders_by_date()
+    # write_orders_by_date()
+
+    # writer = OrderByDateWriter()
+    # orders_json = writer.write_month_orders_json('2016-03-01')

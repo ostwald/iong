@@ -12,9 +12,10 @@ class CustomerRecord(DBRecord):
 
 class CustomersTable (DBTable):
 
+    sqlite_file = schemas.sqlite_file
     schema_fields = schemas.customer
     # sqlite_file = '/Users/ostwald/Documents/ION_DB/ion_db.sqlite'
-    sqlite_file = '/Users/ostwald/devel/projects/iong/ion_db.sqlite'
+    # sqlite_file = '/Users/ostwald/devel/projects/iong/ion_db.sqlite'
     table_name = 'customers'
 
     def get_customer (self, customerid):

@@ -1,3 +1,6 @@
+sqlite_file = '/Users/ostwald/Documents/ION_DB/ion_db.sqlite'
+
+
 order_details = [
     'orderdetailid',
     'orderid',
@@ -40,5 +43,4 @@ customer = [
     'lastname',
     'companyname',
     'emailaddress',
-    'createddate',
 ]
