@@ -1,6 +1,9 @@
 import datetime, sys
 from dateutil.relativedelta import *
 
+def unescape (s):
+    return s.replace ('%27', '&apos;')
+
 def get_iso_date (date_str):
     in_time_fmt = '%m/%d/%y %H:%M'
     dt = datetime.datetime.strptime(date_str, in_time_fmt)

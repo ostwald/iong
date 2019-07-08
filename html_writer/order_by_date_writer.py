@@ -4,6 +4,7 @@ from UserList import UserList
 
 sys.path.append ('/Users/ostwald/devel/python/python-lib/')
 sys.path.append ('/Users/ostwald/devel/projects')
+sys.path.append ('/Users/ostwald/devel')
 
 from html import HtmlDocument
 from HyperText.HTML40 import *
@@ -56,13 +57,22 @@ class SchemaObj:
 class Detail(SchemaObj):
 
     schema = schemas.order_details
+    options_pat = re.compile( '\[([^\]]*)\]')
 
     def asHtml (self):
         d = DIV (klass='order_details')
         title = u'{} x {} ({})'.format(self.quantity, self.productname, self.productcode)
-        d.append(DIV (title))
-        # d.append (DIV (self.optionids, klass='optionids'))
+        d.append(DIV (utils.unescape(title)))
+        d.append (DIV (self.parse_options(), klass='options'))
         return d
+
+    def parse_options (self):
+        raw = utils.unescape(self.options)
+        m = self.options_pat.findall (raw)
+        order_list = UL (klass='detail-options')
+        for item in m:
+            order_list.append (LI (item.strip()))
+        return order_list
 
 class Customer(SchemaObj):
 
@@ -123,7 +133,8 @@ class OrderEntry (UserDict):
 class OrderByDateDocument (HtmlDocument):
 
 
-    home = '/Users/ostwald/devel/projects/iong/html_writer/html'
+    # home = '/Users/ostwald/devel/projects/iong/html_writer/html'
+    home = os.path.join(schemas.ion_devel_dir, 'html_writer/html')
 
     DOCTYPE = Markup ("doctype","html")
 
@@ -143,8 +154,9 @@ class OrderByDateDocument (HtmlDocument):
 def get_order_day (order):
     return order['orderdate'].split(' ')[0].strip()
 
-if __name__ == '__main__':
-    json_data_path = '/Users/ostwald/devel/projects/iong/json_writer/ORDERS_BY_DATE.json'
+def main ():
+    # json_data_path = '/Users/ostwald/devel/projects/iong/json_writer/ORDERS_BY_DATE.json'
+    json_data_path = os.path.join (schemas.ion_devel_dir, 'json_writer/ORDERS_BY_DATE.json')
     orders = map (OrderEntry, json.loads(open(json_data_path, 'r').read()))
     print '{} orders read'.format(len(orders))
 
@@ -202,10 +214,14 @@ if __name__ == '__main__':
     # print unicode (doc.__str__())
     doc.write()
 
-    #
-    # # shipping = Address (order_entry.order, 'ship')
-    # shipping = Address (order_entry.order, 'billing')
-    # print shipping.asHtml().__str__()
-    #
-    # detail = order_entry.details[0]
-    # print detail.asHtml()
+
+
+
+
+
+if __name__ == '__main__':
+
+    # raw = """[What is Your Desired Delivery Date?:Deliver ASAP (Be sure to select the correct method of shipping at check out)][Message:ENTER YOUR GIFT MESSAGE HERE INCLUDING SIGNATURE][Leaves:Lake Champlain Chocolate Leaves (O,AG)][Brie cheese and hot pepper rasp:Brie Cheese and Hot Pepper Raspberry Spread (N,G,AG)][ Adult Coloring Kit:The Mindfulness Coloring Book and Pen Set Anti-Stress Kit][ Eye Mask Warmie:Intelex Heatable Lavender Eye Mask][Tea Superfruit:Republic of Tea Superfruit Green Tea Assortment - 24 bags (N,G)][ Clif choco pistachios:Clif Family Kitchen Dark Chocolate Toffee Pistachios (N,AG)][Blueberries and chocolate:Bissinger%27s Dark Chocolate Covered Blueberries (G,N,AG)][ Enjoy Life Mountain Mambo Mix:Enjoy Life Seed and Fruit Mix (G,N,V,K)][Apple Mango Chips:Fruitivity Crunchy Mango Apple Chips (N,G,NGMO,C)][Caramel Popcorn:Rocky Mountain Caramel Popcorn (N,G,AG,C)][White Cheddar Popcorn:Rocky Mountain White Cheddar Popcorn (N,G,AG,C)][34 Degrees Sesame Crackers:34 Degrees Sesame Crackers (N,A,C)][Martinellis:Martinelli%27s Organic Sparkling Cider (O,G,K)][Body oil:Aura Cacia Relaxing Lavender Aromatherapy Massage/Body Oil][Candle Illuminature:Illuminature Glass Candle (N,AG,C)]"""
+    # print str(parse_options(raw))
+
+    main()
