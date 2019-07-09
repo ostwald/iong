@@ -42,6 +42,19 @@ class OrdersTable (DBTable):
         rows = self.cursor.fetchall()
         return map(lambda x:x[0], rows)
 
+    def get_customer_ids (self):
+        query = 'SELECT DISTINCT customerid FROM {}'.format(self.table_name)
+        self.cursor.execute(query)
+        rows = self.cursor.fetchall()
+        return map(lambda x:x[0], rows)
+
+    def get_orders_by_customer (self, customerid):
+        query = "SELECT * FROM {tn} WHERE customerid = '{id}' ORDER BY orderdate ASC"\
+            .format(tn=self.table_name, id=customerid)
+        self.cursor.execute(query)
+        rows = self.cursor.fetchall()
+        return map(OrderRecord, rows)
+
 def get_order_tester():
     table = OrdersTable()
 

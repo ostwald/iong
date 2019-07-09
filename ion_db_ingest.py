@@ -9,8 +9,8 @@ import sqlite3
 class Schema_Field:
 
     def __init__ (self, data):
-        self.name = data[0]
-        self.type = data[1]
+        self.name = data
+        self.type = 'TEXT'
 
     def get_value(self, obj):
         # if type(self.value_fn) in [type(0), type(''), type (0.5)]:
@@ -100,11 +100,19 @@ class DBTable:
 
         # apparently we need at least one field to create a record
         first_field = self.schema.fields[0]
+
+        print 'CREATE TABLE {tn} ({fn} {ft})' \
+            .format(tn=self.table_name, fn=first_field.name, ft=first_field.type)
+
         c.execute('CREATE TABLE {tn} ({fn} {ft})' \
                   .format(tn=self.table_name, fn=first_field.name, ft=first_field.type))
 
         if len(self.schema.fields)  > 1:
             for field in self.schema.fields[1:]:
+
+                print "ALTER TABLE {tn}  ADD COLUMN '{cn}' {ct}" \
+                    .format(tn=self.table_name, cn=field.name, ct=field.type)
+
                 c.execute("ALTER TABLE {tn}  ADD COLUMN '{cn}' {ct}" \
                           .format(tn=self.table_name, cn=field.name, ct=field.type))
 

@@ -27,6 +27,20 @@ class CustomersTable (DBTable):
 
         return CustomerRecord(row)
 
+    def get_customers (self, where=None, order_by=None, order='ASC'):
+        query = "SELECT * FROM `{tn}`".format(tn=self.table_name)
+
+        if where is not None:
+            query += " WHERE {}".format(where)
+
+        if order_by is not None:
+            query += " ORDER BY {} {}".format(order_by, order)
+
+        self.cursor.execute(query)
+        rows = self.cursor.fetchall()
+
+        return map (CustomerRecord, rows)
+
 
 def get_customer_tester():
     table = CustomersTable()
