@@ -56,13 +56,12 @@ class OrderByCustomerWriter:
 
         return orders_json
 
-    def write_month_orders_json (self, start):
+    def write_orders_batch_json (self, where_select):
         """
         start is of form YYYY-MM-DD
         """
-        end = utils.get_first_of_next_month(start)
-        orders_json = self.get_orders_json (start, end)
-        outpath = os.path.join ('orders_by_date', start + '.json')
+        orders_json = self.get_orders_json(where_clause)
+        outpath = os.path.join ('orders_by_customers', start + '.json')
         self.write_orders_json(orders_json, outpath)
 
     def write_orders_json (self, data_json, path):
@@ -81,3 +80,4 @@ if __name__ == '__main__':
 
     json_data = writer.get_orders_json(where_clause)
     print json.dumps(json_data, indent=3)
+    writer.write_orders_json(json_data, 'ORDERS_BY_CUSTOMER.json')
