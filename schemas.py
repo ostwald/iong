@@ -1,10 +1,10 @@
 ## home
-sqlite_file = '/Users/ostwald/Documents/ION_DB/ion_db.sqlite'
-ion_devel_dir = '/Users/ostwald/devel/iong'
+# sqlite_file = '/Users/ostwald/Documents/ION_DB/ion_db.sqlite'
+# ion_devel_dir = '/Users/ostwald/devel/iong'
 
 ## work
-# sqlite_file = '/Users/ostwald/devel/projects/iong/ion_db.sqlite'
-# ion_devel_dir = '/Users/ostwald/devel/projects/iong'
+sqlite_file = '/Users/ostwald/devel/projects/iong/ion_db.sqlite'
+ion_devel_dir = '/Users/ostwald/devel/projects/iong'
 
 
 order_details = [

@@ -52,16 +52,22 @@ class OrderByCustomerWriter:
                     order_json['details'].append (detail.asDict())
 
             orders_json.append(customer_json)
-            break
 
         return orders_json
 
-    def write_orders_batch_json (self, where_select):
+    def write_orders_batch_json (self, where_clause):
         """
         start is of form YYYY-MM-DD
         """
+
+        pat = re.compile ("UPPER\(lastname\) LIKE \'([A-Z])\%\'")
+        m = pat.match (where_clause)
+        if not m:
+            raise Exception ('Could not parse where clause: ({})'.format(where_clause))
+        where_letter = m.group(1)
+
         orders_json = self.get_orders_json(where_clause)
-        outpath = os.path.join ('orders_by_customers', start + '.json')
+        outpath = os.path.join ('orders_by_customer_name', where_letter + '.json')
         self.write_orders_json(orders_json, outpath)
 
     def write_orders_json (self, data_json, path):
@@ -74,10 +80,15 @@ class OrderByCustomerWriter:
 if __name__ == '__main__':
     writer = OrderByCustomerWriter()
     where_clause = "UPPER(lastname) LIKE 'A%'"
-    where_clause = "customerid = '10168'"
-    customers = writer.get_customers(where_clause)
-    print '{} customers found'.format(len(customers))
+    # where_clause = "customerid = '10168'"   # a lot of orders
 
-    json_data = writer.get_orders_json(where_clause)
-    print json.dumps(json_data, indent=3)
-    writer.write_orders_json(json_data, 'ORDERS_BY_CUSTOMER.json')
+    if 0: # sanity check
+        customers = writer.get_customers(where_clause)
+        print '{} customers found'.format(len(customers))
+
+    if 0:  # small sample
+        json_data = writer.get_orders_json(where_clause)
+        # print json.dumps(json_data, indent=3)
+        writer.write_orders_json(json_data, 'ORDERS_BY_CUSTOMER.json')
+
+    writer.write_orders_batch_json (where_clause)

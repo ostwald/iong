@@ -83,7 +83,7 @@ class Customer(SchemaObj):
             title = u''
             if self.companyname:
                 title = u'{} '.format(self.companyname)
-            title += u'{} {}  ({})'.format(self.firstname, self.lastname, self.emailaddress)
+            title += u'{} {}  ({})  #{}'.format(self.firstname, self.lastname, self.emailaddress, self.customerid)
             return  DIV (title, klass='customer')
         except:
             print 'Could not render customer: {}'.format(sys.exc_info()[1])

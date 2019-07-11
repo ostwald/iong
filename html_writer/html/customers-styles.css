@@ -1,0 +1,16 @@
+
+.customer-header {
+    border:black solid thin;
+}
+
+.order_num {
+    padding-left:20px;
+}
+
+.company-name, .customer-email, .customer-email, .customer-id {
+    padding-left:20px;
+}
+
+.company-name {
+    font-weight:bold;
+}

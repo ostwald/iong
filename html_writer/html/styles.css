@@ -3,13 +3,6 @@ body {
     font-size:.85em;
 }
 
-.customer {
-    font-size:1.2em;
-    /*margin:3px 0 3px;*/
-    display:inline-block;
-    padding-left:15px;
-}
-
 .order h3 {
     margin:0px 5px;
     padding:0;
@@ -20,6 +13,13 @@ body {
     border:thin black solid;
     margin-left:15px;
     padding:5px;
+}
+
+.customer {
+    font-size:1.2em;
+    /*margin:3px 0 3px;*/
+    display:inline-block;
+    padding-left:15px;
 }
 
 .detail-options li {
