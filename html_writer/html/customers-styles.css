@@ -1,6 +1,17 @@
+H1 {
+    text-align:center;
+}
+
+#customers {
+}
 
 .customer-header {
     border:black solid thin;
+}
+
+.customer-header .num-orders {
+    float:right;
+    margin-right:25px;
 }
 
 .order_num {
@@ -13,4 +24,28 @@
 
 .company-name {
     font-weight:bold;
+}
+
+#navbar {
+    width:100%;
+    margin:20px auto 10px;
+    height:30px;
+}
+
+#navbar .prev-button, .next-button {
+    font-size:1.5em;
+    text-align:center;
+    border:orange solid 2px;
+    padding:4px;
+    border-radius:5px;
+
+}
+
+#navbar .prev-button {
+    float:left;
+
+}
+
+#navbar .next-button {
+    float:right;
 }

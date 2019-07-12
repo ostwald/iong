@@ -131,3 +131,6 @@ class IongHtmlDocument (HtmlDocument):
         f.write (self.__str__())
         f.close()
 
+if __name__ == '__main__':
+
+    pass

@@ -46,12 +46,6 @@ class CustomerEntry (UserDict):
 
     def render_header(self, parent):
 
-        # if len (self.customer.companyname) > 0:
-        #     companyname = self.customer.companyname
-        # else:
-        #     companyname = None
-        # emailaddress = self.customer.emailaddress
-
         name_str = '{}, {}'.format(self.customer.lastname, self.customer.firstname)
         name = SPAN (name_str, klass='customer-name')
         if len (self.customer.companyname) > 0:
@@ -65,7 +59,10 @@ class CustomerEntry (UserDict):
 
         # c_str += ' {}   customer #{}'.format (emailaddress, self.customer.customerid)
 
+        num_orders = DIV(str(len(self.orders)), ' orders', klass="num-orders")
+
         header = H2 (name, klass='customer-header')
+        header.append (num_orders)
         if company:
             header.append (company)
         header.append (email)
@@ -118,11 +115,7 @@ class OrderEntry (UserDict):
         ))
         return table
 
-
-def get_order_day (order):
-    return order['orderdate'].split(' ')[0].strip()
-
-def main (json_data_path):
+def main (json_data_path, outpath='orderByCustomer_TESTER'):
     # json_data_path = '/Users/ostwald/devel/projects/iong/json_writer/ORDERS_BY_DATE.json'
     # json_data_path = os.path.join (schemas.ion_devel_dir, 'json_writer/ORDERS_BY_CUSTOMER.json')
 
@@ -131,6 +124,14 @@ def main (json_data_path):
 
 
     doc = CustomerOrderHtmlDoc ()
+
+    navbar = DIV (id="navbar")
+    navbar.append (DIV ("prev", klass='prev-button'))
+    navbar.append (DIV ("next", klass='next-button'))
+
+    doc.body.append(navbar)
+
+    doc.body.append (H1 ('Orders grouped by Customer Name'))
 
     entry_list = DIV(id='customers')
 
@@ -141,14 +142,13 @@ def main (json_data_path):
     doc.body.append(entry_list)
 
     # print unicode (doc.__str__())
-    doc.write('orderByCustomer_TESTER')
-
+    doc.write(outpath)
 
 if __name__ == '__main__':
 
     # raw = """[What is Your Desired Delivery Date?:Deliver ASAP (Be sure to select the correct method of shipping at check out)][Message:ENTER YOUR GIFT MESSAGE HERE INCLUDING SIGNATURE][Leaves:Lake Champlain Chocolate Leaves (O,AG)][Brie cheese and hot pepper rasp:Brie Cheese and Hot Pepper Raspberry Spread (N,G,AG)][ Adult Coloring Kit:The Mindfulness Coloring Book and Pen Set Anti-Stress Kit][ Eye Mask Warmie:Intelex Heatable Lavender Eye Mask][Tea Superfruit:Republic of Tea Superfruit Green Tea Assortment - 24 bags (N,G)][ Clif choco pistachios:Clif Family Kitchen Dark Chocolate Toffee Pistachios (N,AG)][Blueberries and chocolate:Bissinger%27s Dark Chocolate Covered Blueberries (G,N,AG)][ Enjoy Life Mountain Mambo Mix:Enjoy Life Seed and Fruit Mix (G,N,V,K)][Apple Mango Chips:Fruitivity Crunchy Mango Apple Chips (N,G,NGMO,C)][Caramel Popcorn:Rocky Mountain Caramel Popcorn (N,G,AG,C)][White Cheddar Popcorn:Rocky Mountain White Cheddar Popcorn (N,G,AG,C)][34 Degrees Sesame Crackers:34 Degrees Sesame Crackers (N,A,C)][Martinellis:Martinelli%27s Organic Sparkling Cider (O,G,K)][Body oil:Aura Cacia Relaxing Lavender Aromatherapy Massage/Body Oil][Candle Illuminature:Illuminature Glass Candle (N,AG,C)]"""
     # print str(parse_options(raw))
 
-    path = '/Users/ostwald/devel/projects/iong/json_writer/orders_by_customer_name/A.json'
+    path = '/Users/ostwald/devel/projects/iong/json_writer/orders_by_customer_name/other.json'
 
     main(path)
