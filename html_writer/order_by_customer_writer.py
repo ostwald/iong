@@ -17,16 +17,81 @@ class CustomerOrderHtmlDoc (IongHtmlDocument):
     javascript_defaults = [
         "//code.jquery.com/jquery-1.12.4.js",
         "//code.jquery.com/ui/1.12.1/jquery-ui.js",
-        "moment.min.js",
-        "base-script.js",
-        "customers-script.js"
+        "../moment.min.js",
+        "../base-script.js",
+        "../customers-script.js"
     ]
 
     stylesheet_defaults = [
         "//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css",
-        "styles.css",
-        "customers-styles.css"
+        "../styles.css",
+        "../customers-styles.css"
     ]
+
+    html_root = os.path.join (schemas.ion_devel_dir, 'html_writer/html')
+    data_dir = os.path.join (schemas.ion_devel_dir, 'json_writer/orders_by_customer_name')
+    html_output_dir = os.path.join (html_root, 'lastname')
+
+    def __init__ (self, *content, **attrs):
+        if not attrs.has_key("index_letter"):
+            raise Exception, "index_letter is a required param"
+        self.index_letter = attrs['index_letter'].upper()
+        self.filename = self.index_letter == '@' and 'other' or self.index_letter
+
+        del(attrs['index_letter'])
+        IongHtmlDocument.__init__ (self, *content, **attrs)
+
+        print 'index letter is {}'.format(self.index_letter)
+
+    def render_navbar (self):
+        navbar = TABLE (id='navbar')
+        for i in range (ord('A')-1, ord('Z')+1):
+            if i == ord('A')-1:
+                name = "other"
+            else:
+                name = chr(i)
+
+            if chr(i) == self.index_letter:
+                cell = TD (name, klass="navcell current_cell")
+            else:
+                # href = os.path.join (self.html_root, 'lastname', name+'.html')
+                cell = TD (Href(name+'.html', name), klass="navcell")
+
+            # cell['klass'] = "CELL"
+            navbar.append (cell)
+
+        self.body.append(navbar)
+
+    def render (self):
+        json_data_path = os.path.join (schemas.ion_devel_dir, 'json_writer/orders_by_customer_name','{}.json'.format(self.filename))
+
+        entries = map (CustomerEntry, json.loads(open(json_data_path, 'r').read()))
+        print '{} entries read'.format(len(entries))
+
+
+        # doc = CustomerOrderHtmlDoc (index_letter=letter)
+
+        # navbar = DIV (id="navbar")
+        # navbar.append (DIV ("prev", klass='prev-button'))
+        # navbar.append (DIV ("next", klass='next-button'))
+
+        self.render_navbar()
+
+        self.body.append (H1 ('Orders grouped by Customer Name'))
+
+        entry_list = DIV(id='customers')
+
+        for entry in entries:
+            entry.render(entry_list)
+
+
+        self.body.append(entry_list)
+
+    def write (self):
+        path = os.path.join (self.html_output_dir, self.filename+'.html')
+        self.writeto (path)
+        print 'written to {}'.format(path)
+
 
 class CustomerEntry (UserDict):
     def __init__ (self, data):
@@ -46,10 +111,10 @@ class CustomerEntry (UserDict):
 
     def render_header(self, parent):
 
-        name_str = '{}, {}'.format(self.customer.lastname, self.customer.firstname)
+        name_str = u'{}, {}'.format(self.customer.lastname, self.customer.firstname)
         name = SPAN (name_str, klass='customer-name')
         if len (self.customer.companyname) > 0:
-            c_str = ' ({})'.format(self.customer.companyname)
+            c_str = u' ({})'.format(self.customer.companyname)
             company = SPAN (c_str, klass='company-name')
         else:
             company = None
@@ -67,9 +132,7 @@ class CustomerEntry (UserDict):
             header.append (company)
         header.append (email)
         header.append (id)
-        parent.append (
-            header
-        )
+        parent.append (header)
 
 class OrderEntry (UserDict):
 
@@ -115,40 +178,46 @@ class OrderEntry (UserDict):
         ))
         return table
 
-def main (json_data_path, outpath='orderByCustomer_TESTER'):
-    # json_data_path = '/Users/ostwald/devel/projects/iong/json_writer/ORDERS_BY_DATE.json'
-    # json_data_path = os.path.join (schemas.ion_devel_dir, 'json_writer/ORDERS_BY_CUSTOMER.json')
+def main (letter, outpath='orderByCustomer_TESTER'):
 
-    entries = map (CustomerEntry, json.loads(open(json_data_path, 'r').read()))
-    print '{} entries read'.format(len(entries))
+    doc = CustomerOrderHtmlDoc (index_letter=letter)
+    doc.render()
+    doc.write()
 
+class CustomerOrderIndexDoc(CustomerOrderHtmlDoc):
 
-    doc = CustomerOrderHtmlDoc ()
+    def __init__ (self, *content, **attrs):
+        IongHtmlDocument.__init__ (self, *content, **attrs)
+        self.filename = 'index'
+        self.index_letter = None
 
-    navbar = DIV (id="navbar")
-    navbar.append (DIV ("prev", klass='prev-button'))
-    navbar.append (DIV ("next", klass='next-button'))
-
-    doc.body.append(navbar)
-
-    doc.body.append (H1 ('Orders grouped by Customer Name'))
-
-    entry_list = DIV(id='customers')
-
-    for entry in entries:
-        entry.render(entry_list)
+    def render(self):
+        self.render_navbar()
+        self.body.append (H1 ('Orders grouped by Customer Name'))
 
 
-    doc.body.append(entry_list)
+def render_index_page():
+    doc = CustomerOrderIndexDoc ()
+    doc.render()
+    doc.write()
 
-    # print unicode (doc.__str__())
-    doc.write(outpath)
+def render_all ():
+    for i in range (ord('A')-1, ord('Z')+1):
+        main(chr(i))
+
 
 if __name__ == '__main__':
 
     # raw = """[What is Your Desired Delivery Date?:Deliver ASAP (Be sure to select the correct method of shipping at check out)][Message:ENTER YOUR GIFT MESSAGE HERE INCLUDING SIGNATURE][Leaves:Lake Champlain Chocolate Leaves (O,AG)][Brie cheese and hot pepper rasp:Brie Cheese and Hot Pepper Raspberry Spread (N,G,AG)][ Adult Coloring Kit:The Mindfulness Coloring Book and Pen Set Anti-Stress Kit][ Eye Mask Warmie:Intelex Heatable Lavender Eye Mask][Tea Superfruit:Republic of Tea Superfruit Green Tea Assortment - 24 bags (N,G)][ Clif choco pistachios:Clif Family Kitchen Dark Chocolate Toffee Pistachios (N,AG)][Blueberries and chocolate:Bissinger%27s Dark Chocolate Covered Blueberries (G,N,AG)][ Enjoy Life Mountain Mambo Mix:Enjoy Life Seed and Fruit Mix (G,N,V,K)][Apple Mango Chips:Fruitivity Crunchy Mango Apple Chips (N,G,NGMO,C)][Caramel Popcorn:Rocky Mountain Caramel Popcorn (N,G,AG,C)][White Cheddar Popcorn:Rocky Mountain White Cheddar Popcorn (N,G,AG,C)][34 Degrees Sesame Crackers:34 Degrees Sesame Crackers (N,A,C)][Martinellis:Martinelli%27s Organic Sparkling Cider (O,G,K)][Body oil:Aura Cacia Relaxing Lavender Aromatherapy Massage/Body Oil][Candle Illuminature:Illuminature Glass Candle (N,AG,C)]"""
     # print str(parse_options(raw))
 
-    path = '/Users/ostwald/devel/projects/iong/json_writer/orders_by_customer_name/other.json'
+    if 0:   # write one html doc
+        letter = 'C'
+        main(letter)
 
-    main(path)
+    if 0:
+        render_all()
+
+    render_index_page()
+
+

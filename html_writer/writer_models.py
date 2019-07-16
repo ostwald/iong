@@ -128,6 +128,7 @@ class IongHtmlDocument (HtmlDocument):
 
     def writeto(self, path, indent=0, perlevel=2):
         f = codecs.open (path, 'w', 'utf8')
+        # print 'self.__str__() is a "{}"'.format(type (self.__str__()))
         f.write (self.__str__())
         f.close()
 
