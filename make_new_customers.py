@@ -18,6 +18,8 @@ orders_table = OrdersTable()
 customer_ids = orders_table.get_customer_ids()
 # print customer_ids
 
+print 'inserting records for {} into new customer table'.format(len(customer_ids))
+
 customer_all_table = CustomerAllTable()
 
 customer_table = DBTable(schemas.sqlite_file, 'customers', schemas.customer)

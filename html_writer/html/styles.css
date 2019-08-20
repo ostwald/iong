@@ -72,3 +72,7 @@ body {
     font-size:18pt;
     font-weight:bold;
 }
+
+.navcell:hover {
+    background:lightyellow;
+}

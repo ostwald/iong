@@ -10,6 +10,7 @@ from tabdelimited import CsvFile, FieldList, CsvRecord
 
 import sqlite3
 from ion_db_ingest import DBTable
+import schemas
 
 class CSVLoader:
 
@@ -25,9 +26,12 @@ class CSVLoader:
         self.db_table = DBTable (self.sqlite_file, self.table_name, self.make_db_schema_spec())
 
     def load_table(self):
-
+        i = 0
         for row in self.csv_reader:
             self.db_table.add_record (row)
+            i += 1
+            if i % 1000 == 0:
+                print i
 
         print 'Database Loaded'
 
@@ -41,21 +45,21 @@ class CSVLoader:
 
 
 if __name__ == '__main__':
-    sqlite_file = '/Users/ostwald/Documents/ION_DB/ion_db.sqlite'
+    # sqlite_file = '/Users/ostwald/Documents/ION_DB/ion_db.sqlite'
+    sqlite_file = schemas.sqlite_file
+    csv_data_dir = '/Users/ostwald/Documents/ION_DB/data_version_2/csv_since_2016-01-01/'
 
     if 0:
         table_name = 'orders'
-        path = '/Users/ostwald/Documents/ION_DB/data/IONG_Orders/select_fields/since_2016/Orders.csv'
-        # path = '/Users/ostwald/Documents/ION_DB/data/IONG_Orders/select_fields/test/Orders.csv'
-        # path = '/Users/ostwald/Documents/ION_DB/data/IONG_Orders/select_fields/test/Orders-tiny.csv'
+        path = os.path.join(csv_data_dir, 'Orders.csv')
 
     if 1:
         table_name = 'order_details'
-        path = '/Users/ostwald/Documents/ION_DB/data/IONG_Orders/select_fields/since_2016/OrderDetails.csv'
+        path = os.path.join(csv_data_dir, 'OrderDetails.csv')
 
     if 0:
         table_name = 'customers'
-        path = '/Users/ostwald/Documents/ION_DB/data/IONG_Orders/select_fields/Customers_selected_fields.csv'
+        path = os.path.join(csv_data_dir, 'Customers.csv')
 
     loader = CSVLoader(path, sqlite_file, table_name)
     loader.load_table()

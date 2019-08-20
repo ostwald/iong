@@ -9,7 +9,14 @@ import sqlite3
 class Schema_Field:
 
     def __init__ (self, data):
-        self.name = data
+        """
+        NOTE: we are ignoring everything in the data (field spec)
+        except the first item, which is the field name
+        """
+        if type (data) == type([]):
+            self.name = data[0]
+        else:
+            self.name = data
         self.type = 'TEXT'
 
     def get_value(self, obj):
@@ -101,6 +108,13 @@ class DBTable:
         # apparently we need at least one field to create a record
         first_field = self.schema.fields[0]
 
+        if 1:
+            print 'schema fields:'
+            for item in self.schema.fields:
+                print ' - ', item.name
+
+            print 'first field : ', first_field.name
+
         print 'CREATE TABLE {tn} ({fn} {ft})' \
             .format(tn=self.table_name, fn=first_field.name, ft=first_field.type)
 
@@ -133,7 +147,7 @@ class DBTable:
             c.execute(u"INSERT INTO {tn} ({fn}) VALUES ({fv})" \
                       .format(tn=self.table_name, fn=quoted_schema, fv=quoted_values))
         except:
-            print('ERROR: {}'.format(sys.exc_info()))
+            print('Add_record ERROR: {}'.format(sys.exc_info()))
             print 'quoted_schema: %s' % quoted_schema
             print 'quoted_values: %s' % type(quoted_values)
             sys.exit(1)

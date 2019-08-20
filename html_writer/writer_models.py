@@ -121,7 +121,7 @@ class IongHtmlDocument (HtmlDocument):
 
     def write (self, filename=None):
         if filename is None:
-            filename = 'orderByDate_TESTER'
+            filename = 'writer_model_TESTER'
         path = os.path.join (self.home, filename + '.html')
         self.writeto (path)
         print 'written to {}'.format(path)
