@@ -1,9 +1,13 @@
 import os
 
-## home
-ion_devel_dir = '/Users/ostwald/devel/iong'
-sqlite_file = os.path.join (ion_devel_dir, 'ion_db.sqlite')
-# sqlite_file = '/Users/ostwald/devel/iong/ion_db.sqlite'
+if 0: ## home
+    ion_devel_dir = '/Users/ostwald/devel/iong'
+    sqlite_file = os.path.join (ion_devel_dir, 'ion_db.sqlite')
+
+elif 1: ## work
+    ion_devel_dir = '/Users/ostwald/devel/projects/iong'
+    sqlite_file = os.path.join (ion_devel_dir, 'ion_db.sqlite')
+
 
 python_lib_dir = os.path.join (os.path.dirname(ion_devel_dir), 'python-lib')
 
@@ -16,9 +20,7 @@ html_root_dir = os.path.join (ion_devel_dir, 'html_writer/html')
 html_data_dir = os.path.join (ion_devel_dir, 'html_writer/html/data')
 html_sandbox = os.path.join (ion_devel_dir, 'html_writer/html/sandbox')
 
-## work
-# sqlite_file = '/Users/ostwald/devel/projects/iong/ion_db.sqlite'
-# ion_devel_dir = '/Users/ostwald/devel/projects/iong'
+
 
 
 order_details = [

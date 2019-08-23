@@ -48,6 +48,13 @@ class OrderByCustomerWriter:
 
         return orders_json
 
+    def get_where_clause (self, where_letter):
+        num = ord(where_letter.upper())
+        if num < ord('A'):
+            return "UPPER(lastname) < 'A'"
+        else:
+            return "UPPER(lastname) LIKE '{}%'".format(chr(num))
+
     def write_orders_batch_json (self, where_letter):
         """
         start is of form YYYY-MM-DD
@@ -59,7 +66,7 @@ class OrderByCustomerWriter:
         #     raise Exception ('Could not parse where clause: ({})'.format(where_clause))
         # where_letter = m.group(1)
 
-        where_clause = utils.get_last_name_where_clause (ord(where_letter))
+        where_clause = self.get_where_clause (where_letter)
         if where_letter == '@':
             where_letter = 'other'
         outpath = os.path.join (schemas.json_data_dir, self.data_dir_name, where_letter + '.json')

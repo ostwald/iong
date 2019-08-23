@@ -10,8 +10,7 @@ sys.path.append ('/Users/ostwald/devel')
 from html import HtmlDocument
 from HyperText.HTML40 import *
 from iong import utils, schemas
-from customer_writer_models import IongHtmlDocument
-from by_customer_html_writer import CustomerOrderHtmlDoc, CustomerEntry
+from customer_writer_models import IongHtmlDocument, CustomerOrderHtmlDoc, CustomerEntry
 
 class CustomerEmailEntry (CustomerEntry):
 
@@ -41,6 +40,7 @@ class CustomerEmailEntry (CustomerEntry):
         parent.append (header)
 
 class CustomerEmailOrderHtmlDoc (CustomerOrderHtmlDoc):
+
     json_data_dir = os.path.join (schemas.json_data_dir,'customer_email')
     html_output_dir = os.path.join (schemas.html_root_dir, 'customer_email')
     entry_class = CustomerEmailEntry
@@ -82,7 +82,7 @@ if __name__ == '__main__':
     # print str(parse_options(raw))
 
     if 0:   # write one html doc
-        letter = 'B'
+        letter = 'G'
         main(letter)
 
     if 1:

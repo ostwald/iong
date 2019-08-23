@@ -14,11 +14,16 @@ class OrderByCustomerEmailWriter (OrderByCustomerWriter):
     data_dir_name = 'customer_email'
     order_by = "UPPER(emailaddress)"
 
+    def get_where_clause (self, where_letter):
+        num = ord(where_letter.upper())
+        if num < ord('A'):
+            return "UPPER(emailaddress) < 'A'"
+        else:
+            return "UPPER(emailaddress) LIKE '{}%'".format(chr(num))
+
 if __name__ == '__main__':
     writer = OrderByCustomerEmailWriter()
-    LETTER = 'B'
-    where_clause = "UPPER(emailaddress) LIKE '{}%'".format(LETTER)
-    # where_clause = "customerid = '10168'"   # a lot of orders
+
 
     if 0: # sanity check
         customers = writer.get_customers(where_clause)
@@ -26,10 +31,14 @@ if __name__ == '__main__':
 
     if 0:  # small sample
 
+        LETTER = 'Z'
+        where_clause = "UPPER(emailaddress) LIKE '{}%'".format(LETTER)
+        # where_clause = "customerid = '10168'"   # a lot of orders
+
         json_data = writer.get_orders_json(where_clause)
         # print json.dumps(json_data, indent=3)
 
-        if 1:
+        if 0:
             # send to default path (data)
             outpath = os.path.join (schemas.json_data_dir,  writer.data_dir_name, '{}.json'.format(LETTER))
             writer.write_orders_json(json_data, outpath)

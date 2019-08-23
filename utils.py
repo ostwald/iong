@@ -54,12 +54,6 @@ def get_human_date (date_str):
             return date_str
 
 
-def get_last_name_where_clause(num):
-    if num < ord('A'):
-        return "UPPER(lastname) < 'A'"
-    else:
-        return "UPPER(lastname) LIKE '{}%'".format(chr(num))
-
 def print_lastname_where_clauses():
 
     for i in range (ord('A')-1, ord('Z')+1):
