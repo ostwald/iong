@@ -76,3 +76,51 @@ body {
 .navcell:hover {
     background:lightyellow;
 }
+
+/* HADER and NAVBAR */
+
+#page-header .page-heading {
+    font-size:1.3em;
+    font-style:italic;
+    text-align:center;
+}
+
+table#navbar {
+    border-collapse:collapse;
+    width:100%;
+    margin:10px auto 10px;
+    height:30px;
+    text-align:center;
+}
+
+.navcell {
+    display:inline-block;
+    /*width:40px;*/
+    /*height:40px;*/
+    padding: 5px 10px;
+    text-align:center;
+    vertical-align:middle;
+    border:thin black solid;
+    font-size:1.1em;
+}
+
+.navcell.current_cell {
+    font-weight:bold;
+    border:2px solid black;
+    font-size:1.5em
+}
+
+#title-bar {
+    height:40px;
+}
+
+#title-bar .title {
+    float:left;
+    font-size:2em;
+    font-weight:bold;
+}
+
+#title-bar .nav {
+    float:right;
+    font-size:1.2em;
+}

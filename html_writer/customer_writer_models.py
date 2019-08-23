@@ -19,7 +19,8 @@ class CustomerOrderHtmlDoc (IongHtmlDocument):
         "//code.jquery.com/ui/1.12.1/jquery-ui.js",
         "../moment.min.js",
         "../base-script.js",
-        "../customers-script.js"
+        "../customers-script.js",
+        "../javascript.js"
     ]
 
     stylesheet_defaults = [
@@ -50,7 +51,19 @@ class CustomerOrderHtmlDoc (IongHtmlDocument):
 
         print 'index letter is {}'.format(self.index_letter)
 
+
+    def render_title_bar (self):
+        """
+        goes under nav bar
+        :return:
+        """
+        titlebar = DIV (id="title-bar")
+        titlebar.append (DIV ('Generic title bar', klass="title"))
+        return titlebar
+
     def render_navbar (self):
+        header = DIV(id='page-header')
+        header.append (DIV('IONG Orders since 2016', klass="page-heading"))
         navbar = TABLE (id='navbar')
         for i in range (ord('A')-1, ord('Z')+1):
             if i == ord('A')-1:
@@ -67,7 +80,9 @@ class CustomerOrderHtmlDoc (IongHtmlDocument):
             # cell['klass'] = "CELL"
             navbar.append (cell)
 
-        self.body.append(navbar)
+        header.append(navbar)
+        header.append (self.render_title_bar())
+        self.body.append (header)
 
     def render (self):
         json_data_path = os.path.join (self.json_data_dir, '{}.json'.format(self.filename))
@@ -84,7 +99,7 @@ class CustomerOrderHtmlDoc (IongHtmlDocument):
 
         self.render_navbar()
 
-        self.body.append (H1 (self.page_title))
+        # self.body.append (H1 (self.page_title))
 
         entry_list = DIV(id='customers')
 

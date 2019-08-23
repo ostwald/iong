@@ -47,6 +47,12 @@ class CustomerEmailOrderHtmlDoc (CustomerOrderHtmlDoc):
     page_title = 'Orders grouped by Customer Email Address'
 
 
+    def render_title_bar (self):
+        titlebar = DIV (id="title-bar")
+        titlebar.append (DIV ('Orders Grouped by Customer Email Address', klass="title"))
+        titlebar.append (BUTTON ('Group by Customer Name', type="button", klass="nav"))
+        return titlebar
+
 class CustomerEmailOrderIndexDoc(CustomerOrderHtmlDoc):
 
     html_output_dir = os.path.join (schemas.html_root_dir, 'customer_email')
@@ -82,7 +88,7 @@ if __name__ == '__main__':
     # print str(parse_options(raw))
 
     if 0:   # write one html doc
-        letter = 'G'
+        letter = '@'
         main(letter)
 
     if 1:

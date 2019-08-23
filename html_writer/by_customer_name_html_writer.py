@@ -49,6 +49,12 @@ class CustomerNameOrderHtmlDoc (CustomerOrderHtmlDoc):
     entry_class = CustomerNameEntry
     page_title = 'Orders grouped by Customer Name'
 
+    def render_title_bar (self):
+        titlebar = DIV (id="title-bar")
+        titlebar.append (DIV ('Orders Grouped by Customer Name', klass="title"))
+        titlebar.append (BUTTON ('Group by Customer Email Address',  type="button", klass="nav"))
+        return titlebar
+
 def main (letter, outpath='orderByCustomer_TESTER'):
 
     doc = CustomerNameOrderHtmlDoc (index_letter=letter)
@@ -68,7 +74,6 @@ class CustomerNameOrderIndexDoc(CustomerOrderHtmlDoc):
         self.render_navbar()
         self.body.append (H1 ('Orders grouped by Customer Name'))
 
-
 def render_index_page():
     doc = CustomerNameOrderIndexDoc ()
     doc.render()
@@ -85,12 +90,11 @@ if __name__ == '__main__':
     # print str(parse_options(raw))
 
     if 0:   # write one html doc
-        letter = 'C'
+        letter = '@'
         main(letter)
 
     if 1:
         render_all()
-
-    render_index_page()
+        render_index_page()
 
 
